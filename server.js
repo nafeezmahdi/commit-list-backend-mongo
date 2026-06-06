@@ -73,6 +73,24 @@ app.post("/api/add-todo", async (req, res) => {
   }
 });
 
+//
+app.delete("/api/delete-all-todos", async (req, res) => {
+  try {
+    await Todo.deleteMany({});
+    res.status(200).json({
+      message: "All tasks deleted successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error deleting all tasks:", error);
+    res.status(500).json({
+      message: "Failed to delete all tasks",
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // --- START SERVER ---
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
