@@ -54,6 +54,31 @@ app.get("/api/todos", async (req, res) => {
   }
 });
 
+app.get("/api/todos/:id", async (req, res) => {
+  try {
+    const todo = await Todo.findById(req.params.id);
+    if (!todo) {
+      return res.status(404).json({
+        message: "Task not found",
+        success: false,
+      });
+    } else {
+      res.status(200).json({
+        message: "Task retrieved successfully",
+        success: true,
+        data: todo,
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching task:", error);
+    res.status(500).json({
+      message: "Failed to retrieve task",
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // CREATE: Save a new task to the database
 app.post("/api/add-todo", async (req, res) => {
   try {
