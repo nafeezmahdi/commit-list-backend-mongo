@@ -38,6 +38,7 @@ const Todo = mongoose.model("Todo", TodoSchema);
 app.get("/api/todos", async (req, res) => {
   try {
     const todos = await Todo.find().sort({ createdAt: -1 });
+    // const todos = await Todo.find().populate("subtasks").populate("comments");
 
     res.status(200).json({
       message: "Tasks retrieved successfully",
@@ -56,7 +57,12 @@ app.get("/api/todos", async (req, res) => {
 
 app.get("/api/todos/:id", async (req, res) => {
   try {
-    const todo = await Todo.findById(req.params.id);
+    // const todo = await Todo.findById(req.params.id);
+    // If you have sub-documents stored as references, you MUST populate them
+    const todo = await Todo.findById(req.params.id)
+      .populate("subtasks")
+      .populate("comments");
+
     if (!todo) {
       return res.status(404).json({
         message: "Task not found",
