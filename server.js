@@ -140,6 +140,32 @@ app.delete("/api/delete-todo/:id", async (req, res) => {
   }
 });
 
+app.put("/api/update-todo/:id", async (req, res) => {
+  try {
+    const updatedTodo = await Todo.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    if (!updatedTodo) {
+      return res.json(404).json({
+        message: "Task not found",
+        success: false,
+      });
+    }
+    res.status(200).json({
+      message: "Task updated successfully",
+      success: true,
+      data: updatedTodo,
+    });
+  } catch (error) {
+    console.error("Error updating task:", error);
+    res.status(500).json({
+      message: "Failed to update task",
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // --- START SERVER ---
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
