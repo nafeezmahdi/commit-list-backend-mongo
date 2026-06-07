@@ -122,6 +122,24 @@ app.delete("/api/delete-all-todos", async (req, res) => {
   }
 });
 
+//
+app.delete("/api/delete-todo/:id", async (req, res) => {
+  try {
+    await Todo.findByIdAndDelete(req.params.id);
+    res.status(200).json({
+      message: "Task deleted successfully",
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error deleting task");
+    res.status(500).json({
+      message: "Failed to delete task",
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
 // --- START SERVER ---
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
