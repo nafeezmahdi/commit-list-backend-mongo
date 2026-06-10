@@ -26,6 +26,11 @@ const TodoSchema = new mongoose.Schema(
     category: { type: String, default: "None" },
     status: { type: String, default: "Pending" },
     priority: { type: String, default: "Medium" },
+    tags: [
+      {
+        name: { type: String },
+      },
+    ],
   },
   { timestamps: true },
 ); // Automatically adds 'createdAt' and 'updatedAt'
@@ -165,6 +170,10 @@ app.put("/api/update-todo/:id", async (req, res) => {
     });
   }
 });
+
+app.get("/", (req, res) =>
+  res.send(`Commit List Backend is running on http://localhost:${PORT}`),
+);
 
 // --- START SERVER ---
 const PORT = process.env.PORT || 5000;
